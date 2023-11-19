@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Discussion Forum</title>
+</head>
+<body>
+    <h1>Discussion Forum</h1>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post }}</li>
+            {% for reply in post.replies.all %}
+                <ul>
+                    <li>{{ reply }}</li>
+                    <!-- Recursive loop for replies -->
+                    {% for nested_reply in reply.replies.all %}
+                        <ul>
+                            <li>{{ nested_reply }}</li>
+                            <!-- You can continue this structure for deeper nesting -->
+                        </ul>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'create_post' %}" method="post">
+        {% csrf_token %}
+        <label for="content">Content:</label>
+        <textarea name="content" required></textarea>
+        <br>
+        <label for="parent_post_id">Reply to (optional):</label>
+        <input type="number" name="parent_post_id">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
