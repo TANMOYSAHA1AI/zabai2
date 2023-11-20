@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Post</title>
+</head>
+<body>
+    <h1>Create a New Post</h1>
+    <form action="{% url 'create_post' %}" method="post">
+        {% csrf_token %}
+        <label for="content">Content:</label>
+        <textarea name="content" required></textarea>
+        <br>
+        <label for="parent_post_id">Reply to (optional):</label>
+        <input type="number" name="parent_post_id">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
