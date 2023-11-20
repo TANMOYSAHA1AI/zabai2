@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum</title>
+    <style>
+        /* Add your custom styles here */
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .post {
+            margin-bottom: 10px;
+        }
+
+        .indent {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Discussion Forum</h1>
+
+    <div id="forum">
+        
+    </div>
+
+    <form id="createPostForm">
+        <label for="content">Content:</label>
+        <textarea id="content" required></textarea>
+        <br>
+        <label for="parentPostId">Reply to (optional):</label>
+        <input type="number" id="parentPostId">
+        <br>
+        <button type="button" onclick="createPost()">Submit</button>
+    </form>
+
+    <script>
+        // Sample data for testing
+        const discussionData = [
+            { id: 1, content: 'THIS IS A TOPIC. LET’S CALL IT TOPIC 1', parentPostId: null },
+            { id: 2, content: 'THIS IS A REPLY TO THE TOPIC 1', parentPostId: 1 },
+            { id: 3, content: 'THIS IS ANOTHER REPLY TO THE TOPIC 1', parentPostId: 1 },
+            { id: 4, content: 'THIS IS A REPLY TO THE PREVIOUS REPLY (1.2)', parentPostId: 2 },
+            { id: 5, content: 'THIS IS ANOTHER REPLY', parentPostId: 2 },
+            { id: 6, content: 'THIS IS YET ANOTHER REPLY TO THE TOPIC 1', parentPostId: 1 },
+            { id: 7, content: 'THIS IS ANOTHER REPLY TO THE REPLY (1.3)', parentPostId: 6 },
+            { id: 8, content: 'THIS IS A DIFFERENT TOPIC. LET’S CALL IT TOPIC 2', parentPostId: null },
+            { id: 9, content: 'THIS IS A REPLY TO TOPIC 2', parentPostId: 8 },
+            { id: 10, content: 'THIS IS A REPLY TO THE THREAD (2.1)', parentPostId: 9 },
+            { id: 11, content: 'THIS IS A REPLY TO (2.1.1)', parentPostId: 10 },
+            { id: 12, content: 'THIS IS A REPLY TO (2.1.1.1)', parentPostId: 11 },
+            { id: 13, content: 'THIS IS A REPLY TO (2.1.1.1.1)', parentPostId: 12 },
+            { id: 14, content: 'THIS CAN CONTINUE INDEFINITELY', parentPostId: 13 },
+        ];
+
+        // Function to create the discussion forum HTML
+        function createDiscussionForum(data, parentId, level) {
+            const container = document.getElementById('forum');
+            const posts = data.filter(post => post.parentPostId === parentId);
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+                postElement.innerHTML = `${'&nbsp;'.repeat(level * 2)}${post.content}`;
+                container.appendChild(postElement);
+
+                // Recursively create child posts
+                createDiscussionForum(data, post.id, level + 1);
+            });
+        }
+
+        // Function to create a new post
+        function createPost() {
+            const content = document.getElementById('content').value;
+            const parentPostId = document.getElementById('parentPostId').value;
+
+            // Add your logic to send the data to the backend (API call, etc.)
+            console.log('Creating post:', { content, parentPostId });
+
+            // For simplicity, we'll just refresh the page to simulate the creation
+            location.reload();
+        }
+
+        // Initial load of the discussion forum
+        createDiscussionForum(discussionData, null, 0);
+    </script>
+</body>
+</html>
